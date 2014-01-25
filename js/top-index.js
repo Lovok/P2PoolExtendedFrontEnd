@@ -146,13 +146,13 @@ function UpdateData() {
       miner.hash=local_stats.miner_hash_rates[i];
       miners.push(miner)
     };
-    $("#miners").html('<tr><th>Miner</th><th style="width:175px;">Hashrate</th><th style="width:175px;">Dead hashrate</th><th style="width:175px;">% dead</th></tr>');
+    $("#miners").html('<tr><th>Miner</th><th style="width:175px;">Hashrate</th><th style="width:175px;">Dead hashrate</th><th style="width:175px;">% dead</th><th style="width:175px;">Expected time to share</th></tr>');
     var tr = d3.select("#miners").selectAll().data(miners).enter().append('tr');
     tr.append('td').text(function(miner){return miner.miner_name});
     tr.append('td').text(function(miner){return d3.format('.3s')(miner.hash) +'H/s'});
     tr.append('td').text(function(miner){return local_stats.miner_dead_hash_rates[miner.miner_name] != null ? d3.format('.3s')(local_stats.miner_dead_hash_rates[miner.miner_name]) + 'H/s' : '0H/s'});
     tr.append('td').text(function(miner){return local_stats.miner_dead_hash_rates[miner.miner_name] != null ? d3.format('.3s')(local_stats.miner_dead_hash_rates[miner.miner_name] / miner.hash * 100) + '%' : '0%'});
-
+    tr.append('td').text(function(miner){return d3.format('.3r')(local_stats.attempts_to_share/miner.hash/3600) + " hours (" + d3.format('.3r')(local_stats.attempts_to_share/miner.hash/60) + " minutes)"});
     document.title=d3.format('.3s')(local) + 'H/s (' + d3.format('.2p')(local_dead/local) + ') | ' + local_stats.shares.total + ' shares | ' + siteTitle + ' (' + coinSymbol + ')';
   });
 
